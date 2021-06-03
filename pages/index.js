@@ -20,14 +20,18 @@ export default function Home() {
 
   const handleDataRequest = (ev) => {
     setResponse({});
-    console.log('gets here')
+    setServerError('');
     let url = `https://geo.ipify.org/api/v1?apiKey=${process.env.NEXT_PUBLIC_GEO_IPIFY_KEY}`;
     if (ipAddress) {
       url += `&ipAddress=${ipAddress}`;
     }
 
     window.fetch(url)
-      .then(resp => resp.json())
+      .then(resp => {
+        if (resp.ok) {
+          return resp.json();
+        }
+      })
       .then(json => {
         const {ip, location, isp} = json;
         let response = {
@@ -35,15 +39,17 @@ export default function Home() {
           location,
           isp
         };
-        console.log('json', json);
         setResponse(response);
         setLat(location.lat);
         setLng(location.lng);
       })
+      .catch(err => {
+        console.log(`Error: (${err.status}) ${err.message}`);
+        setServerError(`${err.message} (status - ${err.status})`);
+      })
   }
 
   useEffect(() => {
-    //if (map.current) return; // initialize map only once    
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
       style: 'mapbox://styles/mapbox/streets-v11',
