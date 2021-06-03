@@ -1,13 +1,22 @@
-import {useState} from 'react';
+import { useRef, useEffect, useState } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 import 'whatwg-fetch';
+import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
+import 'mapbox-gl/dist/mapbox-gl.css';
 import styles from '../styles/Home.module.css';
 
 export default function Home() {
   const [ipAddress, setIpAddress] = useState('');
   const [response, setResponse] = useState({});
   const [serverError, setServerError] = useState('');
+
+  mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
+  const mapContainer = useRef(null);
+  const map = useRef(null);
+  const [lng, setLng] = useState(-70.9);
+  const [lat, setLat] = useState(42.35);
+  const [zoom, setZoom] = useState(9);
 
   const handleDataRequest = (ev) => {
     setResponse({});
@@ -28,8 +37,20 @@ export default function Home() {
         };
         console.log('json', json);
         setResponse(response);
+        setLat(location.lat);
+        setLng(location.lng);
       })
   }
+
+  useEffect(() => {
+    //if (map.current) return; // initialize map only once    
+    map.current = new mapboxgl.Map({
+      container: mapContainer.current,
+      style: 'mapbox://styles/mapbox/streets-v11',
+      center: [lng, lat],
+      zoom: zoom
+    });
+  }, [lat, lng]);
 
   return (
     <div className={styles.container}>
@@ -80,12 +101,14 @@ export default function Home() {
             )}
           </div>
         </div>
-        <div className="map_container"></div>
+        <div>
+          <div ref={mapContainer} className="map-container" />
+        </div>
 
       </main>
 
       <footer className={styles.footer}>
-        <div class="attribution">
+        <div className="attribution">
           Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>. 
           Coded by <a href="#">Your Name Here</a>.
         </div>
