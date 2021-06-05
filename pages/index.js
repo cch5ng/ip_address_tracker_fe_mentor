@@ -82,29 +82,30 @@ export default function Home() {
               <button onClick={handleDataRequest}>></button>
             </div>
           </div>
-          <div className="ip_data_container flex flex-col items-center w-11/12 m-h-1/3 desktop:w-4/5 desktop:flex-row desktop:min-h-1/4 desktop:justify-evenly">
-            <div>
-              <div className="heading text-grey-dark text-sm font-medium">IP Address</div>
+          {/* items-center */}
+          <div className="ip_data_container relative z-10 mt-6 p-6 flex flex-col  w-11/12 m-h-1/3 desktop:w-4/5 desktop:flex-row desktop:min-h-1/4 desktop:justify-evenly desktop:divide-x desktop:divide-grey-dark desktop:items-start">
+            <div className="self-center flex flex-col items-center desktop:w-1/4 desktop:items-start desktop:justify-start">
+              <div className="heading text-grey-dark text-xs font-medium">IP Address</div>
               {Object.keys(response).length > 0 && (
-                <div className="body">{response.respIpAddress}</div>
+                <div className="body text-grey-darkest font-semibold">{response.respIpAddress}</div>
               )}
             </div>
-            <div>
-              <div className="heading text-grey-dark text-sm font-medium">Location</div>
+            <div className="self-center flex flex-col items-center pt-6 desktop:pl-6 desktop:w-1/4 desktop:items-start  desktop:justify-start desktop:pt-0">
+              <div className="heading text-grey-dark text-xs font-medium">Location</div>
               {Object.keys(response).length > 0 && (
-                <div className="body">{response.location.city}, {response.location.region} {response.location.postalCode}</div>  
+                <div className="body text-grey-darkest font-semibold">{response.location.city}, {response.location.region} {response.location.postalCode}</div>  
               )}
             </div>
-            <div>
-              <div className="heading text-grey-dark text-sm font-medium">Timezone</div>
+            <div className="self-center flex flex-col items-center pt-6 desktop:pl-6 desktop:w-1/4 desktop:items-start  desktop:justify-start  desktop:pt-0">
+              <div className="heading text-grey-dark text-xs font-medium">Timezone</div>
               {Object.keys(response).length > 0 && (
-                <div className="body">UTC ({response.location.timezone})</div>  
+                <div className="body text-grey-darkest font-semibold">UTC ({response.location.timezone})</div>  
               )}
             </div>
-            <div>
-              <div className="heading text-grey-dark text-sm font-medium">ISP</div>
+            <div className="self-center flex flex-col items-center pt-6 desktop:pl-6 desktop:w-1/4 desktop:items-start  desktop:justify-start  desktop:pt-0">
+              <div className="heading text-grey-dark text-xs font-medium">ISP</div>
               {Object.keys(response).length > 0 && (
-                <div className="body">{response.isp}</div>  
+                <div className="body text-grey-darkest font-semibold">{response.isp}</div>  
               )}
             </div>
           </div>
