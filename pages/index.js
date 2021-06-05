@@ -14,8 +14,8 @@ export default function Home() {
   mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
   const mapContainer = useRef(null);
   const map = useRef(null);
-  const [lng, setLng] = useState(-70.9);
-  const [lat, setLat] = useState(42.35);
+  const [lng, setLng] = useState(null); //-70.9
+  const [lat, setLat] = useState(null); //42.35
   const [zoom, setZoom] = useState(9);
 
   const handleDataRequest = (ev) => {
@@ -50,12 +50,37 @@ export default function Home() {
   }
 
   useEffect(() => {
-    map.current = new mapboxgl.Map({
-      container: mapContainer.current,
-      style: 'mapbox://styles/mapbox/streets-v11',
-      center: [lng, lat],
-      zoom: zoom
-    });
+    if (lng && lat) {
+      map.current = new mapboxgl.Map({
+        container: mapContainer.current,
+        style: 'mapbox://styles/mapbox/streets-v11',
+        center: [lng, lat],
+        zoom: zoom
+      });  
+    } else {
+      let url = `https://geo.ipify.org/api/v1?apiKey=${process.env.NEXT_PUBLIC_GEO_IPIFY_KEY}`;  
+      window.fetch(url)
+        .then(resp => {
+          if (resp.ok) {
+            return resp.json();
+          }
+        })
+        .then(json => {
+          const {ip, location, isp} = json;
+          let response = {
+            respIpAddress: ip,
+            location,
+            isp
+          };
+          setResponse(response);
+          setLat(location.lat);
+          setLng(location.lng);
+        })
+        .catch(err => {
+          console.log(`Error: (${err.status}) ${err.message}`);
+          setServerError(`${err.message} (status - ${err.status})`);
+        })
+    }
   }, [lat, lng]);
 
   return (
