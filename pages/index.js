@@ -94,7 +94,7 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
-        <div className="form_container"> 
+        <div className="form_container bg-hero-pattern"> 
           <h1>IP Address Tracker</h1>
           <div className="error">
             {serverError && (
@@ -143,7 +143,7 @@ export default function Home() {
 
       </main>
 
-      <footer className={styles.footer}>
+      {/* <footer className={styles.footer}>
         <div className="attribution">
           Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>. 
           Coded by <a href="#">Your Name Here</a>.
@@ -160,7 +160,7 @@ export default function Home() {
             </span>
           </a>
         </div>
-      </footer>
+      </footer> */}
     </div>
   )
 }
