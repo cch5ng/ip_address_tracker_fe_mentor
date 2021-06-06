@@ -13,7 +13,8 @@ export default function Home() {
 
   mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
   const mapContainer = useRef(null);
-  const map = useRef(null);
+  //const map = useRef(null);
+  //let map;
   const [lng, setLng] = useState(null); //-70.9
   const [lat, setLat] = useState(null); //42.35
   const [zoom, setZoom] = useState(9);
@@ -42,8 +43,14 @@ export default function Home() {
         setResponse(response);
         setLat(location.lat);
         setLng(location.lng);
+        // var marker = new mapboxgl.Marker({
+        //   color: "#000",
+        //   draggable: true
+        //   }).setLngLat([location.lng, location.lat])
+        //   .addTo(map);
       })
       .catch(err => {
+        console.log('err', err);
         console.log(`Error: (${err.status}) ${err.message}`);
         setServerError(`${err.message} (status - ${err.status})`);
       })
@@ -51,12 +58,18 @@ export default function Home() {
 
   useEffect(() => {
     if (lng && lat) {
-      map.current = new mapboxgl.Map({
+      const map = new mapboxgl.Map({
         container: mapContainer.current,
         style: 'mapbox://styles/mapbox/streets-v11',
         center: [lng, lat],
         zoom: zoom
-      });  
+      });
+
+      var marker = new mapboxgl.Marker({
+        color: "#000",
+      }).setLngLat([lng, lat])
+        .addTo(map);
+      
     } else {
       let url = `https://geo.ipify.org/api/v1?apiKey=${process.env.NEXT_PUBLIC_GEO_IPIFY_KEY}`;  
       window.fetch(url)
@@ -77,10 +90,12 @@ export default function Home() {
           setLng(location.lng);
         })
         .catch(err => {
+          console.log('err', err);
           console.log(`Error: (${err.status}) ${err.message}`);
           setServerError(`${err.message} (status - ${err.status})`);
         })
     }
+    //return () => map.remove();
   }, [lat, lng]);
 
   return (
