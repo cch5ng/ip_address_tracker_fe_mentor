@@ -101,10 +101,12 @@ export default function Home() {
               <div>{serverError}</div>
             )}
           </div>
-          <div className="mt-1 relative rounded-lg shadow-sm w-11/12 desktop:w-1/3">
-            <input type="text" name="price" id="price" className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-12 border-gray-300 rounded-md h-10" placeholder="Search for any IP address or domain" />
-            <div className="bg-black text-white absolute  inset-y-0 right-0 flex items-center">
-              <button onClick={handleDataRequest}>></button>
+          {/*  */}
+          <div className="mt-1 rounded-lg shadow-sm w-11/12 flex flex-row desktop:w-1/3">
+          {/* relative  */}
+            <input type="text" name="price" id="price" className="focus:ring-indigo-500 focus:border-indigo-500 pl-7 pr-12 border-gray-300 rounded-l-md rounded-r-none h-10 w-10/12" placeholder="Search for any IP address or domain" />
+            <div className="bg-black text-white flex items-center justify-center w-2/12 rounded-r-md rounded-l-none">
+              <button className="bg-black text-white" onClick={handleDataRequest}>></button>
             </div>
           </div>
           {/* items-center */}
