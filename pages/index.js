@@ -13,11 +13,13 @@ export default function Home() {
 
   mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
   const mapContainer = useRef(null);
-  //const map = useRef(null);
-  //let map;
-  const [lng, setLng] = useState(null); //-70.9
-  const [lat, setLat] = useState(null); //42.35
+  const [lng, setLng] = useState(null);
+  const [lat, setLat] = useState(null);
   const [zoom, setZoom] = useState(9);
+
+  const handleInputChange = (ev) => {
+    setIpAddress(ev.target.value);
+  }
 
   const handleDataRequest = (ev) => {
     setResponse({});
@@ -26,6 +28,7 @@ export default function Home() {
     if (ipAddress) {
       url += `&ipAddress=${ipAddress}`;
     }
+    console.log('url', url);
 
     window.fetch(url)
       .then(resp => {
@@ -43,11 +46,6 @@ export default function Home() {
         setResponse(response);
         setLat(location.lat);
         setLng(location.lng);
-        // var marker = new mapboxgl.Marker({
-        //   color: "#000",
-        //   draggable: true
-        //   }).setLngLat([location.lng, location.lat])
-        //   .addTo(map);
       })
       .catch(err => {
         console.log('err', err);
@@ -119,7 +117,8 @@ export default function Home() {
           {/*  */}
           <div className="mt-1 rounded-lg shadow-sm w-11/12 flex flex-row desktop:w-1/3">
           {/* relative  */}
-            <input type="text" name="price" id="price" className="focus:ring-indigo-500 focus:border-indigo-500 pl-7 pr-12 border-gray-300 rounded-l-md rounded-r-none h-10 w-10/12" placeholder="Search for any IP address or domain" />
+            <input type="text" name="price" id="price" className="focus:ring-indigo-500 focus:border-indigo-500 pl-7 pr-12 border-gray-300 rounded-l-md rounded-r-none h-10 w-10/12" placeholder="Search for any IP address or domain" 
+              onChange={handleInputChange} />
             <div className="bg-black text-white flex items-center justify-center w-2/12 rounded-r-md rounded-l-none">
               <button className="bg-black text-white" onClick={handleDataRequest}>></button>
             </div>
