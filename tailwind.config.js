@@ -10,7 +10,13 @@ module.exports = {
       grey: {
         dark: 'hsl(0, 0%, 59%)',
         darkest: 'hsl(0, 0%, 17%)',
-      }
+      },
+      black: {
+        DEFAULT: '#000',
+      },
+      white: {
+        DEFAULT: '#fff',
+      },
     },
     minHeight: {
       '1/4': '25%',
