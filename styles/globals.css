@@ -2,12 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  @font-face {
+    font-family: 'Rubik', sans-serif;
+    font-weight: 400;
+  }
+}
+
 html,
 body {
   padding: 0;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  font-size: 18px;
 }
 
 a {
@@ -22,6 +30,30 @@ a {
 .attribution { font-size: 11px; text-align: center; }
 .attribution a { color: hsl(228, 45%, 44%); }
 
+.form_container {
+  height: 33vh;
+  background-color: #999;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+}
+
+.ip_data_container {
+  border-radius: 12px;
+  background-color: #fff;
+}
+
 .map-container {
   height: 70vh;
+}
+
+h1 {
+  color: #fff;
+  font-weight: 600;
+  font-size: 1.3rem;
+  margin: 1.2rem 0;
+}
+
+.heading {
+  text-transform: uppercase;
 }
