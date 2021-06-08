@@ -144,7 +144,7 @@ export default function Home() {
               <button className="bg-black text-white" onClick={handleDataRequest}>></button>
             </div>
           </div>
-          <div className="ip_data_container relative z-10 mt-6 p-6 flex flex-col  w-11/12 m-h-1/3 desktop:w-4/5 desktop:flex-row desktop:min-h-1/4 desktop:justify-evenly desktop:divide-x desktop:divide-grey-dark desktop:items-start">
+          <div className="ip_data_container relative z-10 mt-6 p-6 space-y-6 flex flex-col  w-11/12 m-h-1/3 desktop:w-4/5 desktop:flex-row desktop:min-h-1/3 desktop:justify-evenly desktop:divide-x desktop:divide-grey-dark desktop:items-start desktop:space-y-0">
             {IpDataItems.map(item => (
               <IpDataItem heading={item.heading} body={item.body} />
             ))}
@@ -160,7 +160,7 @@ export default function Home() {
 
 const IpDataItem = ({heading, body}) => {
   return (
-    <div className="self-center pb-6 flex flex-col items-center desktop:w-1/4 desktop:items-start desktop:justify-start">
+    <div className="flex flex-col items-center desktop:w-1/4 desktop:items-start desktop:justify-start desktop:pl-6">
       <div className="heading text-grey-dark text-xs font-medium">{heading}</div>
       {body.length > 0 && (
         <div className="body text-grey-darkest font-semibold">{body}</div>
