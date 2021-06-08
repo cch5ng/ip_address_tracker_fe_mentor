@@ -11,6 +11,17 @@ export default function Home() {
   const [response, setResponse] = useState({});
   const [serverError, setServerError] = useState('');
 
+  const IpDataItems = [
+    { heading: 'IP Address',
+      body: (response && response.respIpAddress) ? response.respIpAddress : ''},
+    { heading: 'Location', 
+      body: getLocationString()},
+    { heading: 'Timezone', 
+      body: getTimezone()},
+    { heading: 'ISP', 
+      body: (response && response.isp) ? response.isp: ''},
+  ]
+
   mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
   const mapContainer = useRef(null);
   const [lng, setLng] = useState(null);
@@ -28,7 +39,6 @@ export default function Home() {
     if (ipAddress) {
       url += `&ipAddress=${ipAddress}`;
     }
-    console.log('url', url);
 
     window.fetch(url)
       .then(resp => {
@@ -48,10 +58,23 @@ export default function Home() {
         setLng(location.lng);
       })
       .catch(err => {
-        console.log('err', err);
         console.log(`Error: (${err.status}) ${err.message}`);
         setServerError(`${err.message} (status - ${err.status})`);
       })
+  }
+
+  function getLocationString() {
+    let city = response && response.location && response.location.city ? response.location.city : '';
+    let region = response && response.location && response.location.region ? response.location.region : '';
+    let postalCode = response && response.location && response.location.postalCode ? response.location.postalCode : '';
+    let locationStr = `${city}, ${region} ${postalCode}`;
+
+    return locationStr;
+  }
+
+  function getTimezone() {
+    let timezone = response && response.location && response.location.timezone ? `UTC (${response.location.timezone})` : '';
+    return timezone;
   }
 
   useEffect(() => {
@@ -93,7 +116,7 @@ export default function Home() {
           setServerError(`${err.message} (status - ${err.status})`);
         })
     }
-    //return () => map.remove();
+    
   }, [lat, lng]);
 
   return (
@@ -114,69 +137,34 @@ export default function Home() {
               <div>{serverError}</div>
             )}
           </div>
-          {/*  */}
           <div className="mt-1 rounded-lg shadow-sm w-11/12 flex flex-row desktop:w-1/3">
-          {/* relative  */}
             <input type="text" name="price" id="price" className="focus:ring-indigo-500 focus:border-indigo-500 pl-7 pr-12 border-gray-300 rounded-l-md rounded-r-none h-10 w-10/12" placeholder="Search for any IP address or domain" 
               onChange={handleInputChange} />
             <div className="bg-black text-white flex items-center justify-center w-2/12 rounded-r-md rounded-l-none">
               <button className="bg-black text-white" onClick={handleDataRequest}>></button>
             </div>
           </div>
-          {/* items-center */}
           <div className="ip_data_container relative z-10 mt-6 p-6 flex flex-col  w-11/12 m-h-1/3 desktop:w-4/5 desktop:flex-row desktop:min-h-1/4 desktop:justify-evenly desktop:divide-x desktop:divide-grey-dark desktop:items-start">
-            <div className="self-center flex flex-col items-center desktop:w-1/4 desktop:items-start desktop:justify-start">
-              <div className="heading text-grey-dark text-xs font-medium">IP Address</div>
-              {Object.keys(response).length > 0 && (
-                <div className="body text-grey-darkest font-semibold">{response.respIpAddress}</div>
-              )}
-            </div>
-            <div className="self-center flex flex-col items-center pt-6 desktop:pl-6 desktop:w-1/4 desktop:items-start  desktop:justify-start desktop:pt-0">
-              <div className="heading text-grey-dark text-xs font-medium">Location</div>
-              {Object.keys(response).length > 0 && (
-                <div className="body text-grey-darkest font-semibold">{response.location.city}, {response.location.region} {response.location.postalCode}</div>  
-              )}
-            </div>
-            <div className="self-center flex flex-col items-center pt-6 desktop:pl-6 desktop:w-1/4 desktop:items-start  desktop:justify-start  desktop:pt-0">
-              <div className="heading text-grey-dark text-xs font-medium">Timezone</div>
-              {Object.keys(response).length > 0 && (
-                <div className="body text-grey-darkest font-semibold">UTC ({response.location.timezone})</div>  
-              )}
-            </div>
-            <div className="self-center flex flex-col items-center pt-6 desktop:pl-6 desktop:w-1/4 desktop:items-start  desktop:justify-start  desktop:pt-0">
-              <div className="heading text-grey-dark text-xs font-medium">ISP</div>
-              {Object.keys(response).length > 0 && (
-                <div className="body text-grey-darkest font-semibold">{response.isp}</div>  
-              )}
-            </div>
+            {IpDataItems.map(item => (
+              <IpDataItem heading={item.heading} body={item.body} />
+            ))}
           </div>
-
         </div>
-
         <div>
           <div ref={mapContainer} className="map-container" />
         </div>
-
       </main>
-
-      {/* <footer className={styles.footer}>
-        <div className="attribution">
-          Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>. 
-          Coded by <a href="#">Your Name Here</a>.
-        </div>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Powered by{' '}
-            <span className={styles.logo}>
-              <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-            </span>
-          </a>
-        </div>
-      </footer> */}
     </div>
   )
 }
+
+const IpDataItem = ({heading, body}) => {
+  return (
+    <div className="self-center pb-6 flex flex-col items-center desktop:w-1/4 desktop:items-start desktop:justify-start">
+      <div className="heading text-grey-dark text-xs font-medium">{heading}</div>
+      {body.length > 0 && (
+        <div className="body text-grey-darkest font-semibold">{body}</div>
+      )}
+    </div>
+  )
+} 
